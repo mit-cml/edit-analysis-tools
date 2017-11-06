@@ -33,9 +33,6 @@
 
 import os
 import json
-import pickle
-import sys
-from pprint import pprint
 
 
 # list of users to always ignore in data processing
@@ -155,26 +152,3 @@ def convert_json_to_dict(filename, folder):
     with open(file) as afile:
         data = json.load(afile)
     return data
-
-
-# Main function
-if __name__ == '__main__':
-
-    if sys.version_info.major < 3:
-        print("Requires Python 3")
-        exit(1)
-
-    base_dir = '/Users/mark/data-local/userFiles-YPP/userFiles'
-
-    users = get_all_user_names_in(base_dir)
-    projects = get_all_projects_in(base_dir)
-
-    print("Using " + base_dir)
-    print("Found " + str(len(projects)) + " total projects.")
-    print("Found " + str(len(users)) + " users:")
-    pprint(users)
-
-    a = import_all_projects(base_dir)
-
-    print("Imported all projects into variable a.")
-
