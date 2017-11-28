@@ -28,3 +28,8 @@ return all projects organized in a hierarchy of user/project/snapshots. This is 
 This module:
 * combines snapshots from all screens in a project into a single snapshot stream 
 * copies the received date/time out of the snapshot contents into the top-level structure field ```date```
+
+## Development
+Recommend using [JetBrains PyCharm](https://www.jetbrains.com/pycharm/). Configuration files are included. 
+
+Code style is [PEP-8](https://www.python.org/dev/peps/pep-0008/). 
