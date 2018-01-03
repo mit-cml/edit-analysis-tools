@@ -3,8 +3,8 @@
     The input file structure from the snapshot server looks like this:
         userFiles/                              <-- hard-coded name of the base folder
             user/                               <-- username (usually a code name)
-                projectName#projectID.git/      <-- project folder (named after the projects name AND ID number)
-                    Screen1/                    <-- Screen (there is always a 'Screen1', could be more with any name)
+                projectName#projectID/          <-- project folder (named after the projects name AND ID number)
+                    screenID_ScreenName/        <-- Screen (there is always 'nnn_Screen1', could be more with any name)
                         snapshot_2017-08-10T17:43:26.764Z.json
                                                 ^-- Any number of snapshots, named after their date/time
 

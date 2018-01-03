@@ -1,5 +1,13 @@
 # Analysis Tools for Edit Operations Data
 
+## Interactive Environment
+Recommended environment is [IPython](https://github.com/ipython/ipython), version 6 or above. 
+```bash
+$ ipython -i main.py
+```
+Also works equally well with ```$ python3 -i```.
+*Requires Python 3* (which is included in IPython >=6). 
+
 ## Usage
 ```bash
 $ python3 main.py -h
@@ -21,6 +29,9 @@ Snapshot:
 * date - date/time the snapshot was received by the server. Copied from contents during import.
 
 ## Modules
+### main
+Provides command line interface, loads data into memory, and presents interactive analysis environment. 
+
 ### dataImportJson
 Imports raw data from a userFiles directory. Entry point is generally ```import_all_projects(folder)``` which will 
 return all projects organized in a hierarchy of user/project/snapshots. This is the default behavior when running main.
