@@ -137,13 +137,8 @@ def import_users_projects(user_folder):
 
 
 def import_all_projects(base_folder):
-    """Imports all projects from all users, hierarchically organized [user[project...]]"""
+    """Imports all projects from all users, hierarchically organized [user[project...], user[...]]"""
     return [import_users_projects(u) for u in get_all_user_folders_in(base_folder)]
-
-
-# make pickle file for all Json files in project folder, sorted by time
-# def make_project_pickles(projects):
-#    pickle.dump(snapshots, open(project_folder + '/' + os.path.basename(project_folder) + '.p', 'wb'))
 
 
 # convert json file to Python dictionary

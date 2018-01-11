@@ -1,11 +1,12 @@
-from dataImportJson import import_all_projects, get_all_user_names_in, get_all_projects_in
+from database import Library
 
 import sys
 import argparse
-from pprint import pprint
 
 parser = argparse.ArgumentParser(description='Data analysis tools for edit stream data.')
 parser.add_argument('-u', '--userFiles', help='path to userFiles input folder')
+parser.add_argument('-f', '--file', help='saved pickle file from which to restore data')
+
 args = parser.parse_args()
 
 # Main function
@@ -20,14 +21,14 @@ if __name__ == '__main__':
     if args.userFiles:
         base_dir = args.userFiles
 
-    users = get_all_user_names_in(base_dir)
-    projects = get_all_projects_in(base_dir)
+    a = None
 
-    print("Using " + base_dir)
-    print("Found " + str(len(projects)) + " total projects.")
-    print("Found " + str(len(users)) + " users:")
-    pprint(users)
+    if args.file:
+        """Load from previously saved pickle file"""
+        a = Library.from_file(args.file)
+    else:
+        """Load from a raw userFiles directory"""
+        a = Library.from_dir(base_dir)
 
-    a = import_all_projects(base_dir)
-
-    print("Imported all projects into variable a.")
+    if a is not None:
+        print("Imported all projects into variable a.")
