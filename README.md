@@ -33,24 +33,24 @@ The `-f FILE` argument will ignore the input folder and instead load a previousl
 ## Data Structures
 Library (class):
 * Class for holding, interrogating, and updating a database of collected data.
-* member *a:* raw list of all users, which is a list of all of that user's projects, which is a list of snapshots for that project.
+* A Library is a dictionary of users, indexed by their user name.
+* A User is a dictionary of projects, indexed by the project name, in addition to the user's name.
+* A Project is a list of snapshots, in time-order, in addition to some useful metadata.
+* A Snapshot represents the state of a project (app) at a point in time:
+  * A snapshot was created for every code or design change during development.
+  * A Snapshot object contains many metadata fields, including a processed date as a python datetime object.
+  * A Snapshot object also includes a Screen representation provided by AIATools for in-depth code analysis.
 
-Snapshot:
-* contents - state of the project, basically raw import from the collection server
-* flags - metadata added during processing. Starts empty at import.
-* date - date/time the snapshot was received by the server. Copied from contents during import.
+## Importing Data
+### Ignoring users during import
+In the working directory of this script, place a file named *ignore_users* which lists users (as codenames),
+with one user per line. This is useful when you have users who are to be ignored from experimental data,
+which may include research staff or participants who did not complete informed consent.
+Any text after whitespace on a line will be ignored, so it can be used for comments.
+### Ignoring certain files
+In `dataImportJson.py` there is a list of strings `ignore_files`. All file names in there will be ignored.
+The default is `'.DS_Store'` to prevent Mac OS metadata from being processed.
 
-## Modules
-### main
-Provides command line interface, loads data into memory, and presents interactive analysis environment. 
-
-### dataImportJson
-Imports raw data from a userFiles directory. Entry point is generally ```import_all_projects(folder)``` which will 
-return all projects organized in a hierarchy of user/project/snapshots. This is the default behavior when running main.
-
-This module:
-* combines snapshots from all screens in a project into a single snapshot stream 
-* copies the received date/time out of the snapshot contents into the top-level structure field ```date```
 
 ## Development
 Recommend using [JetBrains PyCharm](https://www.jetbrains.com/pycharm/). Configuration files are included. 

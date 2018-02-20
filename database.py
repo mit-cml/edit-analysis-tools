@@ -60,6 +60,9 @@ class Library:
             projects.extend(u.projects_list)
         return projects
 
+    def __getitem__(self, item):
+        return self.users[item]
+
 
 class User:
     """Container representing a single user, which is a collection of projects."""
