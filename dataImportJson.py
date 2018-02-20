@@ -1,10 +1,13 @@
 """
+    This is called from the Library object constructor, and should not need to be invoked manually.
+
     Imports raw data from snapshot server into python environment.
     The input file structure from the snapshot server looks like this:
         userFiles/                              <-- hard-coded name of the base folder
             user/                               <-- username (usually a code name)
                 projectName#projectID/          <-- project folder (named after the projects name AND ID number)
-                    screenID_ScreenName/        <-- Screen (there is always 'nnn_Screen1', could be more with any name)
+                    ScreenName/        <-- Screen (there is always 'Screen1', could be more with any name)
+                                        -- Also, older snapshot versions report it as projectID_ScreenName
                         snapshot_2017-08-10T17:43:26.764Z.json
                                                 ^-- Any number of snapshots, named after their date/time
 
@@ -17,12 +20,7 @@
 
     The output of this is is a collection of users, which is a collection of projects, which is a list of snapshots.
 
-    Snapshot data structure is a dictionary:
-    {
-        'contents'  : dictionary, actual contents from the snapshot server
-        'flags'     : dictionary, flags referring to signals found and other metadata
-        'date'      : string, date/time for indexing. There is also a date in 'contents'.
-    }
+    The output should be passed to the new-and-improved Library object.
 
     Authors:
     Diane Zhou <dianezhou96@gmail.com>
@@ -104,7 +102,7 @@ def get_all_projects_in(base_folder, filter_procedure=lambda x: True):
 
 def make_empty_snapshot():
     """Returns an empty snapshot structure."""
-    return dict(contents={}, flags={}, date="No date set. Look in 'contents'")
+    return dict(contents={})
 
 
 def import_project(project_folder):
@@ -124,10 +122,9 @@ def import_project(project_folder):
                 continue
             snapshot = make_empty_snapshot()
             snapshot['contents'] = convert_json_to_dict(filename, screen)
-            snapshot['date'] = snapshot['contents']['sendDate']
             snapshots.append(snapshot)
 
-    snapshots.sort(key=lambda x: x['date'])
+    snapshots.sort(key=lambda x: x['contents']['sendDate'])
     return snapshots
 
 

@@ -1,4 +1,5 @@
 from database import Library
+import aiatools
 
 import sys
 import argparse
@@ -25,7 +26,7 @@ if __name__ == '__main__':
 
     if args.file:
         """Load from previously saved pickle file"""
-        a = Library.from_file(args.file)
+        a = Library.from_raw_file(args.file)
     else:
         """Load from a raw userFiles directory"""
         a = Library.from_dir(base_dir)
