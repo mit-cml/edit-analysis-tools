@@ -2,8 +2,9 @@ from dataImportJson import *
 from saveVar import *
 from dataIntegrity import *
 from pprint import pprint
-from datetime import datetime
+from datetime import datetime, timedelta
 from io import StringIO
+from sessions import divide_sessions
 
 import pkg_resources
 import aiatools
@@ -79,6 +80,9 @@ class User:
         else:
             self.only_one_project = False
 
+    def length(self):
+        return len(self.projects_list)
+
 
 class Project:
     """Container class representing a single project, which is a collection of snapshots, and some metadata."""
@@ -97,14 +101,13 @@ class Project:
         self.project_name = self.snapshots[0].project_name
         self.project_id = self.snapshots[0].project_id
 
-        self.session_count = -1
-        self.sessions = False
-
         if dropped_snapshots > 0:
             print("Dropped " + str(dropped_snapshots) + " snapshots from " + self.user_name + "/" + self.project_name)
 
         """Generate time deltas"""
-        self.snapshots[0].delta = self.snapshots[0].receive_date_delta = self.snapshots[0].send_date_delta = 0
+        self.snapshots[0].delta = \
+            self.snapshots[0].receive_date_delta = \
+            self.snapshots[0].send_date_delta = timedelta(0)
 
         for i in range(1, len(self.snapshots)):
             self.snapshots[i].delta = self.snapshots[i].date - self.snapshots[i-1].date
@@ -112,6 +115,10 @@ class Project:
                 self.snapshots[i].receive_date_delta = self.snapshots[i].receive_date - \
                                                        self.snapshots[i - 1].receive_date
                 self.snapshots[i].send_date_delta = self.snapshots[i].send_date - self.snapshots[i - 1].send_date
+
+        """Separate into sessions"""
+        self.sessions = divide_sessions(self.snapshots)
+        self.session_count = len(self.sessions)
 
     def length(self):
         return len(self.snapshots)
