@@ -5,6 +5,7 @@ from pprint import pprint
 from datetime import datetime, timedelta
 from io import StringIO
 from sessions import divide_sessions
+from sessions import print_session_summary as sessions_print_session_summary
 
 import pkg_resources
 import aiatools
@@ -61,6 +62,31 @@ class Library:
             projects.extend(u.projects_list)
         return projects
 
+    def divide_sessions(self, idle_time=timedelta(hours=2)):
+        for p in self.all_projects():
+            p.divide_sessions(idle_time)
+
+    def print_session_summary(self, idle_time=None):
+        """
+        Prints out a summary table of all the individual sessions in the given library.
+
+        If the idle_time parameter is specified, it will re-segment all the sessions with the given time,
+        overwriting the previous session data.
+
+        :param idle_time: Timeout
+        :type idle_time: timedelta
+        :return:
+        """
+        sessions_print_session_summary(self, idle_time)
+
+    def get_project(self, name):
+        """
+        Gets projects by matching the project's name, irrespective of which user owns it.
+        :param name: name to match
+        :return: list of projects
+        """
+        return [p for p in self.all_projects() if p.project_name == name]
+
     def __getitem__(self, item):
         return self.users[item]
 
@@ -116,8 +142,13 @@ class Project:
                                                        self.snapshots[i - 1].receive_date
                 self.snapshots[i].send_date_delta = self.snapshots[i].send_date - self.snapshots[i - 1].send_date
 
+        self.sessions = None
+        self.session_count = None
+        self.divide_sessions()
+
+    def divide_sessions(self, idle_time=timedelta(hours=2)):
         """Separate into sessions"""
-        self.sessions = divide_sessions(self.snapshots)
+        self.sessions = divide_sessions(self.snapshots, idle_time)
         self.session_count = len(self.sessions)
 
     def length(self):
