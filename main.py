@@ -1,12 +1,15 @@
 from database import Library
 import aiatools
+import saveVar
 
 import sys
 import argparse
 
 parser = argparse.ArgumentParser(description='Data analysis tools for edit stream data.')
-parser.add_argument('-u', '--userFiles', help='path to userFiles input folder')
-parser.add_argument('-f', '--file', help='saved pickle file from which to restore data')
+parser.add_argument('-d', '-u', '--userFiles', help='Path to userFiles input folder')
+parser.add_argument('-f', '--file', help='Saved pickle file from which to restore data')
+parser.add_argument('-e', '--empty', action='store_true',
+                    help='Initialize with an empty database, useful for testing the environment')
 
 args = parser.parse_args()
 
@@ -27,6 +30,9 @@ if __name__ == '__main__':
     if args.file:
         """Load from previously saved pickle file"""
         a = Library.from_raw_file(args.file)
+    elif args.empty:
+        """Don't load anything! Init an empty library."""
+        a = Library([])
     else:
         """Load from a raw userFiles directory"""
         a = Library.from_dir(base_dir)
