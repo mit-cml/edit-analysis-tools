@@ -130,10 +130,10 @@ class Project:
         if dropped_snapshots > 0:
             print("Dropped " + str(dropped_snapshots) + " snapshots from " + self.user_name + "/" + self.project_name)
 
+        self.last = self.snapshots[-1]
+
         """Generate time deltas"""
-        self.snapshots[0].delta = \
-            self.snapshots[0].receive_date_delta = \
-            self.snapshots[0].send_date_delta = timedelta(0)
+        # All snapshots now initialize with deltas initialized to 0
 
         for i in range(1, len(self.snapshots)):
             self.snapshots[i].delta = self.snapshots[i].date - self.snapshots[i-1].date
@@ -187,6 +187,7 @@ class Snapshot:
             blocks = StringIO(self.raw['contents']['blocks'])
             self.screen = aiatools.Screen(form=form, blocks=blocks)
 
+            self.delta = self.receive_date_delta = self.send_date_delta = timedelta(0)
             self.init = True
 
         except DataIntegrityException as err:
