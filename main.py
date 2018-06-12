@@ -1,6 +1,6 @@
 from database import Library
 import aiatools
-import saveVar
+from saveVar import save_var, restore_var
 
 import sys
 import argparse
