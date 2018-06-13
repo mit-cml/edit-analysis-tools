@@ -6,7 +6,7 @@ import aiatools
 featcomponents = restore_var('featcomponents')
 featblocks = restore_var('featblocks')
 
-assert(len(featcomponents) == 11)  # should be 13, once CloudDB and BluetoothLE are debugged and re-added.
+assert(len(featcomponents) == 13)  # should be 13, once CloudDB and BluetoothLE are debugged and re-added.
 
 
 def test_block(block, params):
@@ -32,7 +32,7 @@ def test_block(block, params):
         return block.type == params
 
 
-def scan_project_blocks(project, blocks_list):
+def scan_project_blocks(project, blocks_list=featblocks):
     """ scan forwards in time, and note when each block of interest is first encountered.
         Only will find blocks specified in the blocks_list. Every entry in blocks_list must satisfy test_block, above.
         Uses a dictionary. Block types are keys. If the key is not yet present, then it is the first encounter."""
@@ -54,7 +54,7 @@ def scan_project_blocks(project, blocks_list):
     project.block_appearances = found
 
 
-def scan_project_components(project, filter_list):
+def scan_project_components(project, filter_list=featcomponents):
     """ scan forwards in time, and note when each component of interest is first encountered.
         Uses a dictionary. Component types are keys. If the key is not yet present, then it is the first encounter."""
 
@@ -62,8 +62,9 @@ def scan_project_components(project, filter_list):
     filter = [str(f) for f in filter_list]
     for snap in project.snapshots:
         for c in snap.screen.components:
-            if str(c.type) in filter and c.type not in found.keys():
-                found[c.type] = snap.date
+            if str(c.type.name) in filter:
+                if c.type.name not in found.keys():
+                    found[c.type.name] = snap.date
 
     project.component_appearances = found
 
@@ -87,3 +88,10 @@ def print_appearances(appearances):
         else:
             name = i
         print(str(name).ljust(28), str(appearances[i]))
+
+
+# for debugging
+# from database import Library
+# a = Library.from_raw_file('malden_finals')
+# scan_project_components(a[3], [ble])
+# print_appearances(a[3].component_appearances)
