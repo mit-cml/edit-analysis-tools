@@ -13,13 +13,21 @@ import pickle
 
 def save_var(variable, name):
     """Saves the value of variable to disk as with the given name."""
+    if name.endswith('.pickle'):
+        name = name[:-7]
+
     with open(name + '.pickle', 'wb') as f:
         pickle.dump(variable, f)
 
 
 def restore_var(name):
     """Loads the value saved in the pickle of the given name and returns that value."""
+
+    if name.endswith('.pickle'):
+        name = name[:-7]
+
     print("Restoring " + name + " data...")
+
     with open(name + '.pickle', 'rb') as f:
         p = pickle.load(f)
     return p
