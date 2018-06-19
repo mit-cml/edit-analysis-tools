@@ -1,3 +1,5 @@
+# To use: import malden as m
+
 from saveVar import restore_var
 import aiatools
 
