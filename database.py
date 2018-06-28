@@ -12,7 +12,7 @@ import aiatools
 
 print_errors = True
 
-if not pkg_resources.get_distribution("aiatools").version.endswith('-p3'):
+if not pkg_resources.get_distribution("aiatools").version.startswith('p3-'):
     raise ImportWarning("aiatools does not appear to be from the Python3 branch.")
 
 
